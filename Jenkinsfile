@@ -4,11 +4,14 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '2'))
     skipDefaultCheckout true
   }
+  triggers {
+    eventTrigger simpleMatch('hello-api-deploy-event')
+  }
   stages {
     stage('Test') {
       agent {
         kubernetes {
-          label 'nodejs-app-pod-2'
+          label 'nodejs-app-inline'
           yamlFile 'nodejs-pod.yaml'
         }
       }
